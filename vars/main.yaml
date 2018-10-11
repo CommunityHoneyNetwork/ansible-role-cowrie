@@ -1,0 +1,5 @@
+---
+
+cowrie_storage_path: "/srv/cowrie"
+
+global_packages: []

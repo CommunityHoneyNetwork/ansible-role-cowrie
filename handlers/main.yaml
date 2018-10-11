@@ -1,0 +1,4 @@
+---
+- name: Print CHN Credentials
+  debug:
+    msg: "You can now log in to chn with Username: admin@localhost Password: {{ chn_admin_password }}"

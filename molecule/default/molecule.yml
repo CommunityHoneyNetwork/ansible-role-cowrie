@@ -1,0 +1,55 @@
+---
+dependency:
+  name: gilt
+driver:
+  name: vagrant
+  provider:
+    name: virtualbox
+lint:
+  name: yamllint
+  options:
+    config-file: './.yamllint'
+provisioner:
+  name: ansible
+  inventory:
+    group_vars:
+      all:
+        bundle_chn: true
+    host_vars:
+      cowrie-ubuntu18:
+        ansible_python_interpreter: "/usr/bin/python3"
+      cowrie-ubuntu16:
+        ansible_python_interpreter: "/usr/bin/python3"
+  lint:
+    name: ansible-lint
+    options:
+      exclude:
+        - molecule/roles/
+verifier:
+  name: testinfra
+  lint:
+    name: flake8
+
+platforms:
+  - name: cowrie-ubuntu18
+    interfaces:
+      - auto_config: true
+        network_name: private_network
+        type: dhcp
+    config_options:
+      synced_folder: True
+    box: ubuntu/bionic64
+    memory: 1024
+    instance_raw_config_args:
+      - "vm.network 'forwarded_port', guest: 80, host: 8018"
+  - name: cowrie-ubuntu16
+    interfaces:
+      - auto_config: true
+        network_name: private_network
+        type: dhcp
+    config_options:
+      synced_folder: True
+    box: ubuntu/xenial64
+    memory: 1024
+    instance_raw_config_args:
+      - "vm.network 'forwarded_port', guest: 80, host: 8016"

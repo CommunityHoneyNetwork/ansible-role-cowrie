@@ -1,0 +1,6 @@
+---
+
+os_packages:
+  - epel-release
+  - python2-pip
+  - docker

@@ -1,0 +1,11 @@
+---
+
+bundle_chn: false
+
+hpfeeds_server: hpfeeds
+
+hpfeeds_server_port: 10000
+
+chn_server: 'http://chnserver'
+
+chn_admin_password: "{{ lookup('password', '/dev/null length=32 chars=hexdigits') }}"

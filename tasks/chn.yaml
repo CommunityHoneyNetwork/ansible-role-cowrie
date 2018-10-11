@@ -1,0 +1,80 @@
+---
+
+- name: Deploy MongoDB Container
+  docker_container:
+    name: mongodb
+    image: stingar/mongodb:latest
+    state: started
+    pull: true
+    restart_policy: always
+    volumes:
+      - /var/lib/mongo
+  tags:
+    - docker
+
+- name: Deploy Redis Container
+  docker_container:
+    name: redis
+    image: stingar/redis:latest
+    state: started
+    pull: true
+    restart_policy: always
+    volumes:
+      - /var/lib/redis
+  tags:
+    - docker
+
+- name: Deploy HPFeeds Container
+  docker_container:
+    name: hpfeeds
+    image: stingar/hpfeeds:latest
+    state: started
+    pull: true
+    restart_policy: always
+    links:
+      - "mongodb:mongodb"
+    ports:
+      - "10000:10000"
+  tags:
+    - docker
+
+- name: Deploy Mnemosyne Container
+  docker_container:
+    name: mnemosyne
+    image: stingar/mnemosyne:latest
+    state: started
+    pull: true
+    restart_policy: always
+    links:
+      - "mongodb:mongodb"
+      - "hpfeeds:hpfeeds"
+  tags:
+    - docker
+
+- name: Throw in a non-interactive password setter
+  copy:
+    src: chn_password_reset.py
+    dest: "{{ cowrie_storage_path }}/chn_password_reset.py"
+    mode: 0755
+  when: bundle_chn
+
+- name: Deploy CHN Container
+  docker_container:
+    name: chnserver
+    image: stingar/chn-server:latest
+    state: started
+    pull: true
+    restart_policy: always
+    links:
+      - "mongodb:mongodb"
+      - "hpfeeds:hpfeeds"
+      - "redis:redis"
+    volumes:
+      - /etc/collector
+      - /opt/sqlite
+      - "{{ cowrie_storage_path}}/chn_logs:/var/log"
+      - "{{ cowrie_storage_path }}/chn_password_reset.py:/opt/chn_password_reset.py"
+    ports:
+      - '80:80'
+  tags:
+    - docker

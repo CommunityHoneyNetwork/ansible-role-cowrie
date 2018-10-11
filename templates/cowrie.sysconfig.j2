@@ -1,0 +1,33 @@
+DEBUG=false
+
+# IP Address of the honeypot
+# Leaving this blank will default to the docker container IP
+IP_ADDRESS=
+
+# CHN Server api to register to
+CHN_SERVER="{{ chn_server }}"
+
+# Server to stream data to
+FEEDS_SERVER="{{ hpfeeds_server }}"
+FEEDS_SERVER_PORT="{{ hpfeeds_server_port }}"
+
+
+# Deploy key from the FEEDS_SERVER administrator
+# This is a REQUIRED value yeeeeah
+DEPLOY_KEY={{ chn_deploy_key_extract.stdout }}
+
+# Registration information file
+# If running in a container, this needs to persist
+# COWRIE_JSON="/etc/cowrie/cowrie.json
+
+# SSH Listen Port
+# Can be set to 22 for deployments on real servers
+# or left at 2222 and have the port mapped if deployed
+# in a container
+SSH_LISTEN_PORT=2222
+
+# Telnet Listen Port
+# Can be set to 23 for deployments on real servers
+# or left at 2223 and have the port mapped if deployed
+# in a container
+TELNET_LISTEN_PORT=2223
