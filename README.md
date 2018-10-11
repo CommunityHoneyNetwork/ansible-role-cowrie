@@ -1,5 +1,7 @@
 # ansible-role-cowrie
 
+[![Build Status](https://stingar-ci-master.oit.duke.edu/buildStatus/icon?job=CommunityHoneyNetwork/ansible-role-cowrie/master)](https://stingar-ci-master.oit.duke.edu/job/CommunityHoneyNetwork/job/ansible-role-cowrie/job/master/)
+
 ## Overview
 
 Deploy cowrie container through ansible
