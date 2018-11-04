@@ -50,6 +50,9 @@
     chn_deploy_key: "{{ chn_deploy_key_extract.stdout }}"
   when: bundle_chn
 
+- debug:
+    var: chn_deploy_key
+
 - name: Cowrie sysconfig
   template:
     src: cowrie.sysconfig.j2
