@@ -2,3 +2,6 @@
 - git: https://github.com/geerlingguy/ansible-role-docker.git
   version: master
   dst: molecule/default/roles/geerlingguy.docker/
+- git: https://github.com/CommunityHoneyNetwork/ansible-role-chn-server.git
+  version: master
+  dst: molecule/default/roles/chn-server

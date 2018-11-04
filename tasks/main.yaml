@@ -34,7 +34,8 @@
     state: started
 
 - name: Include CHN Container and deps
-  include_tasks: chn.yaml
+  include_role:
+    name: chn-server
   when: bundle_chn
 
 # Oof this is ugly
@@ -44,6 +45,10 @@
   changed_when: false
   when: bundle_chn
 
+- name: Set deploy key - Bundled
+  set_fact:
+    chn_deploy_key: "{{ chn_deploy_key_extract.stdout }}"
+  when: bundle_chn
 
 - name: Cowrie sysconfig
   template:
@@ -82,11 +87,3 @@
   tags:
     - docker
   when: bundle_chn
-
-- name: Set CHN Password
-  # yamllint disable-line rule:line-length
-  shell: "docker exec chnserver python /opt/chn_password_reset.py -u 'admin@localhost' -p '{{ chn_admin_password }}' && touch /tmp/chn_passwd_set"
-  args:
-    creates: /tmp/chn_passwd_set
-  when: bundle_chn
-  notify: Print CHN Credentials
