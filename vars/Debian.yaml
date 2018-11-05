@@ -3,3 +3,5 @@
 os_packages:
   - python3-pip
   - docker.io
+
+cowrie_env_file: /etc/default/cowrie

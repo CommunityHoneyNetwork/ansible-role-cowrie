@@ -4,3 +4,5 @@ os_packages:
   - epel-release
   - python2-pip
   - docker
+
+cowrie_env_file: /etc/sysconfig/cowrie
