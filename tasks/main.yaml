@@ -58,6 +58,7 @@
 - name: Pull in images
   docker_image:
     name: "{{ item }}"
+    timeout: 300
   with_items:
     - "stingar/cowrie:{{ chn_version_tag }}"
 
