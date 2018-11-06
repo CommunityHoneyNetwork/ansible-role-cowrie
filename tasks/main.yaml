@@ -55,13 +55,18 @@
     src: cowrie.sysconfig.j2
     dest: "{{ cowrie_storage_path }}/cowrie.sysconfig"
 
+- name: Pull in images
+  docker_image:
+    name: "{{ item }}"
+  with_items:
+    - "stingar/cowrie:{{ chn_version_tag }}"
+
 - name: Standalone Deploy Cowrie container
   docker_container:
     name: cowrie
     image: stingar/cowrie:latest
     state: started
     log_driver: journald
-    pull: true
     restart_policy: always
     volumes:
       - "{{ cowrie_storage_path }}/cowrie.sysconfig:{{ cowrie_env_file }}"
