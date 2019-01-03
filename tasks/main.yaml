@@ -91,6 +91,6 @@
       - "{{ cowrie_storage_path }}/cowrie.sysconfig:{{ cowrie_env_file }}"
       - "{{ cowrie_storage_path }}/cowrie:/etc/cowrie"
     ports:
-      - '22:22'
+      - '22:2222'
   tags:
     - docker
