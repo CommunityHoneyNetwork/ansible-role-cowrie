@@ -55,12 +55,29 @@
     src: cowrie.sysconfig.j2
     dest: "{{ cowrie_storage_path }}/cowrie.sysconfig"
 
-- name: Pull in images
+- name: Pull in cowrie images
   docker_image:
     name: "{{ item }}"
     timeout: 300
   with_items:
     - "stingar/cowrie:{{ chn_version_tag }}"
+  when: not cowrie_build_images
+
+- name: Build Images
+  include_tasks: build_images.yaml
+  when: cowrie_build_images
+
+- name: Set fact for bundled links
+  set_fact:
+    cowrie_container_links:
+      - "chn-server:chnserver"
+      - "hpfeeds:hpfeeds"
+  when: bundle_chn
+
+- name: Set fact for non-bundled links
+  set_fact:
+    cowrie_container_links: []
+  when: not bundle_chn
 
 - name: Standalone Deploy Cowrie container
   docker_container:
@@ -69,27 +86,11 @@
     state: started
     log_driver: journald
     restart_policy: always
+    links: "{{ cowrie_container_links }}"
     volumes:
       - "{{ cowrie_storage_path }}/cowrie.sysconfig:{{ cowrie_env_file }}"
       - "{{ cowrie_storage_path }}/cowrie:/etc/cowrie"
+    ports:
+      - '22:22'
   tags:
     - docker
-  when: not bundle_chn
-
-- name: Bundled Deploy Cowrie container
-  docker_container:
-    name: cowrie
-    image: stingar/cowrie:latest
-    state: started
-    log_driver: journald
-    pull: true
-    restart_policy: always
-    volumes:
-      - "{{ cowrie_storage_path }}/cowrie.sysconfig:/etc/sysconfig/cowrie"
-      - "{{ cowrie_storage_path }}/cowrie:/etc/cowrie"
-    links:
-      - "chnserver:chnserver"
-      - "hpfeeds:hpfeeds"
-  tags:
-    - docker
-  when: bundle_chn

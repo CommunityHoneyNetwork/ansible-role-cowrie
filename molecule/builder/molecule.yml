@@ -16,10 +16,12 @@ provisioner:
       all:
         bundle_chn: true
     host_vars:
-      cowrie-ubuntu18:
+      cowrie-ubuntu18-builder:
         ansible_python_interpreter: "/usr/bin/python3"
-      cowrie-ubuntu16:
+        cowrie_build_images: true
+      cowrie-ubuntu16-builder:
         ansible_python_interpreter: "/usr/bin/python3"
+        cowrie_build_images: true
   lint:
     name: ansible-lint
     options:
@@ -31,7 +33,7 @@ verifier:
     name: flake8
 
 platforms:
-  - name: cowrie-ubuntu18
+  - name: cowrie-ubuntu18-builder
     interfaces:
       - auto_config: true
         network_name: private_network
@@ -40,7 +42,7 @@ platforms:
       synced_folder: True
     box: ubuntu/bionic64
     memory: 1024
-  - name: cowrie-ubuntu16
+  - name: cowrie-ubuntu16-builder
     interfaces:
       - auto_config: true
         network_name: private_network
@@ -49,3 +51,5 @@ platforms:
       synced_folder: True
     box: ubuntu/xenial64
     memory: 1024
+scenario:
+  name: builder

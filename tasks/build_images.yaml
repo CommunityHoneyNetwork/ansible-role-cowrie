@@ -1,0 +1,16 @@
+---
+- name: Pull down fresh git code
+  git:
+    repo: "https://github.com/CommunityHoneyNetwork/{{ item }}.git"
+    dest: "{{ cowrie_storage_path }}/{{ item }}"
+    update: true
+  with_items:
+    - "cowrie"
+
+- name: Build docker images
+  docker_image:
+    dockerfile: Dockerfile-ubuntu
+    name: "stingar/{{ item }}:latest"
+    path: "{{ cowrie_storage_path }}/{{ item }}"
+  with_items:
+    - "cowrie"

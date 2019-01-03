@@ -11,3 +11,5 @@ chn_server: 'http://chnserver'
 chn_admin_password: "{{ lookup('password', '/dev/null length=32 chars=hexdigits') }}"
 
 chn_version_tag: 'latest'
+
+cowrie_build_images: false
